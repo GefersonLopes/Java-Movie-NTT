@@ -1,4 +1,4 @@
-package com.ntt.movie.service;
+package com.ntt.movie.service.Inter;
 
 import java.util.List;
 import java.util.Optional;

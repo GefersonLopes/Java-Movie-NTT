@@ -29,11 +29,11 @@ public class GenreModel {
         this.id = id;
     }
 
-    public String getdname() {
+    public String getName() {
         return name;
     }
 
-    public void setdname(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 }

@@ -1,4 +1,4 @@
-package com.ntt.movie.service;
+package com.ntt.movie.service.Inter;
 
 import java.util.List;
 
@@ -10,9 +10,9 @@ public interface FranchiseService {
 
     FranchiseModel create(FranchiseModel franchise);
 
-    List<FranchiseModel> findAll();
+    List<FranchiseModel> getAll();
 
-    Optional<FranchiseModel> findById(Long id);
+    Optional<FranchiseModel> getById(Long id);
     
     FranchiseModel updateById(Long id, FranchiseModel franchise);
 

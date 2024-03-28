@@ -1,7 +1,6 @@
-package com.ntt.movie.service;
+package com.ntt.movie.service.Inter;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.ntt.movie.model.DirectorModel;
 
@@ -12,7 +11,7 @@ public interface DirectorService {
 
     DirectorModel getById(Long id);
 
-    Optional<DirectorModel> updateById(Long id, DirectorModel actor);
+    DirectorModel updateById(Long id, DirectorModel actor);
     
     void delete(Long id);
 }
