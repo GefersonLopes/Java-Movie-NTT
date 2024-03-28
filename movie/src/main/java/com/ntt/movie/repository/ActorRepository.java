@@ -1,5 +1,7 @@
 package com.ntt.movie.repository;
 
-public class ActorRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
 
-}
+import com.ntt.movie.model.ActorModel;
+
+public interface ActorRepository extends JpaRepository<ActorModel, Long>{}
