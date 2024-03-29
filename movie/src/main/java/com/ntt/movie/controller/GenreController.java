@@ -30,7 +30,7 @@ public class GenreController {
         return ResponseEntity.ok(genreService.create(genre));
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<GenreModel> updateById(@PathVariable Long id, @RequestBody GenreModel genre) {
         return ResponseEntity.ok(genreService.updateById(id, genre));
     }

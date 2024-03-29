@@ -15,13 +15,13 @@ public class ActorController {
     @Autowired
     private ActorService actorService;
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<ActorModel> create(@RequestBody ActorModel actor) {
         ActorModel createdActor = actorService.create(actor);
         return ResponseEntity.ok().body(createdActor);
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<ActorModel>> getAll() {
         List<ActorModel> actors = actorService.getAll();
         return ResponseEntity.ok().body(actors);

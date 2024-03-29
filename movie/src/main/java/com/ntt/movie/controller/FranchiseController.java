@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.ntt.movie.model.FranchiseModel;
+import com.ntt.movie.model.dto.FranchiseCreateRequestDTO;
 import com.ntt.movie.service.Inter.FranchiseService;
 
 @RestController
@@ -15,7 +16,7 @@ public class FranchiseController {
     @Autowired
     private FranchiseService franchiseService;
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<FranchiseModel>> getAll() {
         return ResponseEntity.ok(franchiseService.getAll());
     }
@@ -25,8 +26,8 @@ public class FranchiseController {
         return ResponseEntity.ok(franchiseService.getById(id));
     }
 
-    @PostMapping
-    public ResponseEntity<FranchiseModel> create(@RequestBody FranchiseModel franchise) {
+    @PostMapping("")
+    public ResponseEntity<FranchiseModel> create(@RequestBody FranchiseCreateRequestDTO franchise) {
         return ResponseEntity.ok(franchiseService.create(franchise));
     }
 

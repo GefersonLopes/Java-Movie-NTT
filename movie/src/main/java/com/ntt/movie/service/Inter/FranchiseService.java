@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ntt.movie.model.FranchiseModel;
+import com.ntt.movie.model.dto.FranchiseCreateRequestDTO;
 
 public interface FranchiseService {
 
-    FranchiseModel create(FranchiseModel franchise);
+    FranchiseModel create(FranchiseCreateRequestDTO franchise);
 
     List<FranchiseModel> getAll();
 

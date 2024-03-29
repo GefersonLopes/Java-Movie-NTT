@@ -30,8 +30,6 @@ public class FranchiseModel {
     @JoinColumn(name = "studio_id")
     private StudioModel studio;
 
-    @NotNull(message = "Movies are required")
-    @Valid
     @OneToMany(mappedBy = "franchise")
     private List<MovieModel> movies;
 

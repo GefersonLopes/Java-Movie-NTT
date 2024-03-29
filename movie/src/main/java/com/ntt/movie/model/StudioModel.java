@@ -16,6 +16,7 @@ public class StudioModel {
     @NotBlank(message = "Name is required")
     private String name;
 
+    @NotBlank(message = "Country is required")
     private String country;
 
     @OneToMany(mappedBy = "studio")

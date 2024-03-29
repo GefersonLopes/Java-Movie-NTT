@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.ntt.movie.model.MovieModel;
+import com.ntt.movie.model.dto.MovieCreateRequestDTO;
 import com.ntt.movie.service.Inter.MovieService;
 
 @RestController
@@ -26,7 +27,7 @@ public class MovieController {
     }
 
     @PostMapping
-    public ResponseEntity<MovieModel> create(@RequestBody MovieModel movie) {
+    public ResponseEntity<MovieModel> create(@RequestBody MovieCreateRequestDTO movie) {
         return ResponseEntity.ok(movieService.create(movie));
     }
 

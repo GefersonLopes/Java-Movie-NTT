@@ -30,18 +30,20 @@ public class MovieModel {
     @JoinColumn(name = "studio_id")
     private StudioModel studio;
 
+    @NotNull(message = "Franchise is required")
+    @Valid
     @ManyToOne
     @JoinColumn(name = "franchise_id")
     private FranchiseModel franchise;
 
-    @NotNull
+    @NotNull(message = "Streaming is required")
     @Valid
-    @ManyToMany(mappedBy = "movies")
-    private List<DirectorModel> directors;
-
     @ManyToOne
     @JoinColumn(name = "streaming_id")
     private StreamingModel streaming;
+
+    @ManyToMany(mappedBy = "movies")
+    private List<DirectorModel> directors;
 
     @ManyToMany
     @JoinTable(

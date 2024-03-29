@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ntt.movie.model.MovieModel;
+import com.ntt.movie.model.dto.MovieCreateRequestDTO;
 
 public interface MovieService {
-    MovieModel create(MovieModel movieModel);
+    MovieModel create(MovieCreateRequestDTO movieModel);
   
     List<MovieModel> getAll();
   
@@ -15,19 +16,4 @@ public interface MovieService {
     MovieModel updateById(Long id, MovieModel movieModel);
 
     void delete(Long id);
-    
-    // List<MovieModel> getByTitle(String title);
-
-    // List<MovieModel> getByGenre(String genre);
-
-    // List<MovieModel> getByDirector(String director);
-
-    // List<MovieModel> getByStudio(String studio);
-
-    // List<MovieModel> getByStreaming(String streaming);
-
-    // List<MovieModel> getByRole(String role);
-
-    // List<MovieModel> getByUser(String user);
-
 }
