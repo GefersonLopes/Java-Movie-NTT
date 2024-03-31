@@ -8,6 +8,9 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ntt.movie.model.serializer.MovieSerializer;
+
 @Entity
 @Table(name = "Actor")
 public class ActorModel {
@@ -19,6 +22,7 @@ public class ActorModel {
     @NotBlank(message = "Name is required")
     private String name;
 
+    @JsonSerialize(using = MovieSerializer.class)
     @ManyToMany(mappedBy = "actors", cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MovieModel> movies;

@@ -10,6 +10,11 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ntt.movie.model.serializer.GenreSerializer;
+import com.ntt.movie.model.serializer.MovieSerializer;
+import com.ntt.movie.model.serializer.StudioSerializer;
+
 @Entity
 @Table(name = "Franchise")
 public class FranchiseModel {
@@ -21,6 +26,7 @@ public class FranchiseModel {
     @NotBlank(message = "Name is required")
     private String name;
 
+    @JsonSerialize(using = GenreSerializer.class)
     @NotNull(message = "Genre is required")
     @Valid
     @ManyToOne(cascade = CascadeType.ALL)
@@ -28,6 +34,7 @@ public class FranchiseModel {
     @JoinColumn(name = "genre_id")
     private GenreModel genre;
 
+    @JsonSerialize(using = StudioSerializer.class)
     @NotNull(message = "Studio is required")
     @Valid
     @ManyToOne(cascade = CascadeType.ALL)
@@ -35,6 +42,7 @@ public class FranchiseModel {
     @JoinColumn(name = "studio_id")
     private StudioModel studio;
 
+    @JsonSerialize(using = MovieSerializer.class)
     @OneToMany(mappedBy = "franchise", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MovieModel> movies;

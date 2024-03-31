@@ -10,6 +10,14 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ntt.movie.model.serializer.ActorSerializer;
+import com.ntt.movie.model.serializer.DirectorSerializer;
+import com.ntt.movie.model.serializer.FranchiseSerializer;
+import com.ntt.movie.model.serializer.GenreSerializer;
+import com.ntt.movie.model.serializer.StreamingSerializer;
+import com.ntt.movie.model.serializer.StudioSerializer;
+
 @Entity
 @Table(name = "Movie")
 public class MovieModel {
@@ -21,6 +29,7 @@ public class MovieModel {
     @NotBlank(message = "Title is required")
     private String title;
 
+    @JsonSerialize(using = GenreSerializer.class)
     @NotNull(message = "Genre is required")
     @Valid
     @ManyToOne(cascade = CascadeType.ALL)
@@ -28,6 +37,7 @@ public class MovieModel {
     @JoinColumn(name = "genre_id")
     private GenreModel genre;
 
+    @JsonSerialize(using = StudioSerializer.class)
     @NotNull(message = "Studio is required")
     @Valid
     @ManyToOne(cascade = CascadeType.ALL)
@@ -35,6 +45,7 @@ public class MovieModel {
     @JoinColumn(name = "studio_id")
     private StudioModel studio;
 
+    @JsonSerialize(using = FranchiseSerializer.class)
     @NotNull(message = "Franchise is required")
     @Valid
     @ManyToOne(cascade = CascadeType.ALL)
@@ -42,6 +53,7 @@ public class MovieModel {
     @JoinColumn(name = "franchise_id")
     private FranchiseModel franchise;
 
+    @JsonSerialize(using = StreamingSerializer.class)
     @NotNull(message = "Streaming is required")
     @Valid
     @ManyToOne(cascade = CascadeType.ALL)
@@ -49,10 +61,12 @@ public class MovieModel {
     @JoinColumn(name = "streaming_id")
     private StreamingModel streaming;
 
+    @JsonSerialize(using = DirectorSerializer.class)
     @ManyToMany(mappedBy = "movies", cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<DirectorModel> directors;
 
+    @JsonSerialize(using = ActorSerializer.class)
     @ManyToMany(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(

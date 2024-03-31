@@ -8,6 +8,9 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ntt.movie.model.serializer.MovieSerializer;
+
 @Entity
 @Table(name = "Streaming")
 public class StreamingModel {
@@ -22,6 +25,7 @@ public class StreamingModel {
     @NotBlank(message = "URL is required")
     private String url;
 
+    @JsonSerialize(using = MovieSerializer.class)
     @OneToMany(mappedBy = "streaming", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MovieModel> movies;

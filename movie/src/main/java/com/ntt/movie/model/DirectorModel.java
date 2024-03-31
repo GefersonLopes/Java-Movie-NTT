@@ -8,6 +8,9 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ntt.movie.model.serializer.MovieSerializer;
+
 @Entity
 @Table(name = "Director")
 public class DirectorModel {
@@ -19,6 +22,7 @@ public class DirectorModel {
     @NotBlank(message = "Name is required")
     private String name;
 
+    @JsonSerialize(using = MovieSerializer.class)
     @ManyToMany(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(

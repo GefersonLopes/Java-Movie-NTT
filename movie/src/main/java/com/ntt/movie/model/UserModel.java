@@ -10,7 +10,9 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ntt.movie.model.dto.UserDTO;
+import com.ntt.movie.model.serializer.MovieSerializer;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -39,6 +41,7 @@ public class UserModel {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<RoleModel> roles;
 
+    @JsonSerialize(using = MovieSerializer.class)
     @ManyToMany(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MovieModel> favoritesMovies;

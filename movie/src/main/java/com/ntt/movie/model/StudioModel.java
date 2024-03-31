@@ -8,6 +8,9 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ntt.movie.model.serializer.MovieSerializer;
+
 @Entity
 @Table(name = "Studio")
 public class StudioModel {
@@ -22,6 +25,7 @@ public class StudioModel {
     @NotBlank(message = "Country is required")
     private String country;
 
+    @JsonSerialize(using = MovieSerializer.class)
     @OneToMany(mappedBy = "studio", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MovieModel> movies;
