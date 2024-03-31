@@ -36,6 +36,7 @@ public class FranchiseModel {
     private StudioModel studio;
 
     @OneToMany(mappedBy = "franchise", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MovieModel> movies;
 
     public FranchiseModel() {
