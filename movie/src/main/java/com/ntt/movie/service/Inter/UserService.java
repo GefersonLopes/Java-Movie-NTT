@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ntt.movie.model.UserModel;
+import com.ntt.movie.model.dto.FavoritesMovieDirectorToUserDTO;
 
 public interface UserService {
     UserModel create(UserModel user);
@@ -15,4 +16,6 @@ public interface UserService {
     UserModel updateById(Long id, UserModel user);
     
     void delete(Long id);
+
+    UserModel setFavoritesMovies(Long id, FavoritesMovieDirectorToUserDTO itemsFavorite);
 }

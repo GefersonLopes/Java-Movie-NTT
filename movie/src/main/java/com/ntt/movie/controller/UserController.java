@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.ntt.movie.model.UserModel;
+import com.ntt.movie.model.dto.FavoritesMovieDirectorToUserDTO;
 import com.ntt.movie.service.Inter.UserService;
 
 @RestController
@@ -39,5 +40,10 @@ public class UserController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/favorites-movie/{id}")
+    public UserModel setFavoritesMovies(@PathVariable Long id, @RequestBody FavoritesMovieDirectorToUserDTO itemsFavorite) {        
+        return userService.setFavoritesMovies(id, itemsFavorite);
     }
 }

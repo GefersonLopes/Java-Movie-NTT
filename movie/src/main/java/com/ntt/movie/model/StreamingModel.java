@@ -26,8 +26,7 @@ public class StreamingModel {
     private String url;
 
     @JsonSerialize(using = MovieSerializer.class)
-    @OneToMany(mappedBy = "streaming", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "streaming")
     private List<MovieModel> movies;
 
     public StreamingModel() {

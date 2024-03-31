@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ntt.movie.model.dto.UserDTO;
+import com.ntt.movie.model.serializer.DirectorSerializer;
 import com.ntt.movie.model.serializer.MovieSerializer;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -45,6 +46,11 @@ public class UserModel {
     @ManyToMany(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MovieModel> favoritesMovies;
+
+    @JsonSerialize(using = DirectorSerializer.class)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<DirectorModel> favoritesDirectors;
 
     public UserModel() {
     }
@@ -110,6 +116,14 @@ public class UserModel {
 
     public void setFavoritesMovies(List<MovieModel> favoritesMovies) {
         this.favoritesMovies = favoritesMovies;
+    }
+
+    public List<DirectorModel> getFavoritesDirectors() {
+        return favoritesDirectors;
+    }
+
+    public void setFavoritesDirectors(List<DirectorModel> favoritesDirectors) {
+        this.favoritesDirectors = favoritesDirectors;
     }
 
     @PrePersist

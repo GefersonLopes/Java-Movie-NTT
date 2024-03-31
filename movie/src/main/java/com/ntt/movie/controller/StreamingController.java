@@ -40,4 +40,15 @@ public class StreamingController {
         streamingService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/add-movie")
+    public ResponseEntity<StreamingModel> setMovies(@RequestBody Map<String, Long> request) {
+        return ResponseEntity.ok(streamingService.setMovies(request.get("streaming_id"), request.get("movie_id")));
+    }
+
+    @DeleteMapping("/remove-movie")
+    public ResponseEntity<?> deleteMovies(@RequestBody Map<String, Long> request) {
+        streamingService.deleteMovies(request.get("streaming_id"), request.get("movie_id"));
+        return ResponseEntity.ok().build();
+    }
 }

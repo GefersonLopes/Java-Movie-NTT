@@ -8,7 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.ntt.movie.handler.exception.ExceptionBadRequest;
 import com.ntt.movie.handler.exception.ExceptionNotFound;
+import com.ntt.movie.model.DirectorModel;
+import com.ntt.movie.model.MovieModel;
 import com.ntt.movie.model.UserModel;
+import com.ntt.movie.model.dto.FavoritesMovieDirectorToUserDTO;
+import com.ntt.movie.repository.DirectorRepository;
+import com.ntt.movie.repository.MovieRepository;
 import com.ntt.movie.repository.UserRepository;
 import com.ntt.movie.service.Inter.UserService;
 
@@ -20,6 +25,12 @@ import jakarta.validation.constraints.NotNull;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MovieRepository movieRepository;
+
+    @Autowired
+    private DirectorRepository directorRepository;
 
     @Override
     @Transactional
@@ -101,4 +112,27 @@ public class UserServiceImpl implements UserService {
         UserModel user = userRepository.findById(id).orElseThrow(() -> new ExceptionNotFound("User not found with id: " + id));
         userRepository.deleteById(user.getId());
     }
+
+    @SuppressWarnings("null")
+    @Override
+    public UserModel setFavoritesMovies(Long id, FavoritesMovieDirectorToUserDTO itemsFavorite) {
+        UserModel user = userRepository.findById(id).orElseThrow(() -> new ExceptionNotFound("User not found with id: " + id));
+        MovieModel movie = movieRepository.findById(itemsFavorite.getFavorite_movie_id()).orElseThrow(() -> new ExceptionNotFound("Movie not found with id: " + itemsFavorite.getFavorite_movie_id()));
+        DirectorModel director = directorRepository.findById(itemsFavorite.getFavorite_director()).orElseThrow(() -> new ExceptionNotFound("Director not found with id: " + itemsFavorite.getFavorite_director()));
+        
+        List<MovieModel> favoritesMovies = user.getFavoritesMovies();
+        List<DirectorModel> favoritesDirectors = user.getFavoritesDirectors();
+
+        if(favoritesMovies.contains(movie) || favoritesDirectors.contains(director)){
+            throw new ExceptionBadRequest("Movie or Director already exists in favorites");
+        }
+
+        favoritesMovies.add(movie);
+        favoritesDirectors.add(director);
+
+        user.setFavoritesMovies(favoritesMovies);
+        user.setFavoritesDirectors(favoritesDirectors);
+        
+        return userRepository.save(user);
+    }        
 }

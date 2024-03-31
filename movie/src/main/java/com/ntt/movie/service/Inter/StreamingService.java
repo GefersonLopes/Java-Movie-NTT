@@ -15,4 +15,8 @@ public interface StreamingService {
     StreamingModel updateById(Long id, StreamingModel streaming);
     
     void delete(Long id);
+
+    StreamingModel setMovies(Long streaming_id, Long movie_id);
+
+    void deleteMovies(Long streaming_id, Long movie_id);
 }

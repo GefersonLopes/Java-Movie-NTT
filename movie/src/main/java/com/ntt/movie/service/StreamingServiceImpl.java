@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.ntt.movie.handler.exception.ExceptionBadRequest;
 import com.ntt.movie.handler.exception.ExceptionNotFound;
+import com.ntt.movie.model.MovieModel;
 import com.ntt.movie.model.StreamingModel;
+import com.ntt.movie.repository.MovieRepository;
 import com.ntt.movie.repository.StreamingRepository;
 import com.ntt.movie.service.Inter.StreamingService;
 
@@ -20,6 +22,9 @@ import jakarta.validation.constraints.NotNull;
 public class StreamingServiceImpl implements StreamingService {
     @Autowired
     private StreamingRepository streamingRepository;
+
+    @Autowired
+    private MovieRepository movieRepository;
 
     @Override
     @Transactional
@@ -74,5 +79,41 @@ public class StreamingServiceImpl implements StreamingService {
     public void delete(@Valid @NotNull Long id) {
         StreamingModel streaming = streamingRepository.findById(id).orElseThrow(() -> new ExceptionNotFound("Streaming not found with id: " + id));
         streamingRepository.deleteById(streaming.getId());
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    public StreamingModel setMovies(Long streaming_id, Long movie_id) {
+        StreamingModel streaming = streamingRepository.findById(streaming_id).orElseThrow(() -> new ExceptionNotFound("Streaming not found with id: " + streaming_id));
+        MovieModel movie = movieRepository.findById(movie_id).orElseThrow(() -> new ExceptionNotFound("Movie not found with id: " + movie_id));
+
+        List<MovieModel> movies = streaming.getMovies();
+
+        if(movies.contains(movie)) {
+            throw new ExceptionBadRequest("Movie already added.");
+        }
+
+        movies.add(movie);
+        streaming.setMovies(movies);
+
+        return streamingRepository.save(streaming);
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    public void deleteMovies(Long streaming_id, Long movie_id) {
+        StreamingModel streaming = streamingRepository.findById(streaming_id).orElseThrow(() -> new ExceptionNotFound("Streaming not found with id: " + streaming_id));
+        MovieModel movie = movieRepository.findById(movie_id).orElseThrow(() -> new ExceptionNotFound("Movie not found with id: " + movie_id));
+
+        List<MovieModel> movies = streaming.getMovies();
+
+        if(!movies.contains(movie)) {
+            throw new ExceptionBadRequest("Movie not associated with streaming.");
+        }
+
+        movies.remove(movie);
+        streaming.setMovies(movies);
+
+        streamingRepository.save(streaming);
     }
 }

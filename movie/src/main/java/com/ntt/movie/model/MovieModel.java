@@ -54,10 +54,7 @@ public class MovieModel {
     private FranchiseModel franchise;
 
     @JsonSerialize(using = StreamingSerializer.class)
-    @NotNull(message = "Streaming is required")
-    @Valid
-    @ManyToOne(cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
     @JoinColumn(name = "streaming_id")
     private StreamingModel streaming;
 

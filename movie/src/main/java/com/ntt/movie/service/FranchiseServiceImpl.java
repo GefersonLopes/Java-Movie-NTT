@@ -11,10 +11,13 @@ import com.ntt.movie.handler.exception.ExceptionBadRequest;
 import com.ntt.movie.handler.exception.ExceptionNotFound;
 import com.ntt.movie.model.FranchiseModel;
 import com.ntt.movie.model.GenreModel;
+import com.ntt.movie.model.MovieModel;
 import com.ntt.movie.model.StudioModel;
 import com.ntt.movie.model.dto.FranchiseCreateRequestDTO;
+import com.ntt.movie.model.dto.MovieToFranchiseDTO;
 import com.ntt.movie.repository.FranchiseRepository;
 import com.ntt.movie.repository.GenreRepository;
+import com.ntt.movie.repository.MovieRepository;
 import com.ntt.movie.repository.StudioRepository;
 import com.ntt.movie.service.Inter.FranchiseService;
 
@@ -32,6 +35,9 @@ public class FranchiseServiceImpl implements FranchiseService {
     
     @Autowired
     private StudioRepository studioRepository;
+
+    @Autowired
+    private MovieRepository movieRepository;
 
     @SuppressWarnings("null")
     @Transactional
@@ -106,5 +112,23 @@ public class FranchiseServiceImpl implements FranchiseService {
     public void delete(@Valid @NotNull Long id) {
         FranchiseModel franchise = franchiseRepository.findById(id).orElseThrow(() -> new ExceptionNotFound("Franchise not found with id: " + id));
         franchiseRepository.deleteById(franchise.getId());
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    public FranchiseModel setMovies(MovieToFranchiseDTO movieToFranchise) {
+        FranchiseModel franchise = franchiseRepository.findById(movieToFranchise.getFranchise_id()).orElseThrow(() -> new ExceptionNotFound("Franchise not found with id: " + movieToFranchise.getFranchise_id()));
+        MovieModel movie = movieRepository.findById(movieToFranchise.getMovie_id()).orElseThrow(() -> new ExceptionNotFound("Movie not found with id: " + movieToFranchise.getMovie_id()));
+
+        List<MovieModel> movies = franchise.getMovies();
+
+        if(movies.contains(movie)) {
+            throw new ExceptionBadRequest("Movie already added to franchise.");
+        }
+
+        movies.add(movie);
+        franchise.setMovies(movies);
+
+        return franchiseRepository.save(franchise);
     }
 }

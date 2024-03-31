@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ntt.movie.model.FranchiseModel;
 import com.ntt.movie.model.dto.FranchiseCreateRequestDTO;
+import com.ntt.movie.model.dto.MovieToFranchiseDTO;
 import com.ntt.movie.service.Inter.FranchiseService;
 
 @RestController
@@ -40,5 +41,10 @@ public class FranchiseController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         franchiseService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/add-movie")
+    public ResponseEntity<FranchiseModel> setMovies(@RequestBody MovieToFranchiseDTO movieToFranchise) {
+        return ResponseEntity.ok(franchiseService.setMovies(movieToFranchise));
     }
 }

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.ntt.movie.model.FranchiseModel;
 import com.ntt.movie.model.dto.FranchiseCreateRequestDTO;
+import com.ntt.movie.model.dto.MovieToFranchiseDTO;
 
 public interface FranchiseService {
 
@@ -18,4 +19,6 @@ public interface FranchiseService {
     FranchiseModel updateById(Long id, FranchiseCreateRequestDTO franchise);
 
     void delete(Long id);
+
+    FranchiseModel setMovies(MovieToFranchiseDTO movieToFranchise);
 }
