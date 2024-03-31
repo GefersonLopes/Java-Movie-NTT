@@ -32,8 +32,16 @@ public class UserServiceImpl implements UserService {
             throw new ExceptionBadRequest("Email is required");
         }
 
+        if(userRepository.existsByEmail(user.getEmail())){
+            throw new ExceptionBadRequest("Email already exists");
+        }
+
         if(user.getUsername() == null || user.getUsername().isEmpty()){
             throw new ExceptionBadRequest("Username is required");
+        }
+
+        if(userRepository.existsByUsername(user.getUsername())){
+            throw new ExceptionBadRequest("Username already exists");
         }
 
         if(user.getName() == null || user.getName().isEmpty()) {

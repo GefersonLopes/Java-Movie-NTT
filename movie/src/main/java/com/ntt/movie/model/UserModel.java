@@ -8,7 +8,11 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.ntt.movie.model.dto.UserDTO;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 @Table(name = "User")
@@ -27,6 +31,7 @@ public class UserModel {
     @NotBlank(message = "Email is required")
     private String email;
 
+    @JsonProperty(access = Access.WRITE_ONLY)
     @NotBlank(message = "Password is required")
     private String password;
 
@@ -46,6 +51,7 @@ public class UserModel {
         this.name = userDTO.getName();
         this.email = userDTO.getEmail();
         this.username = userDTO.getUsername();
+        this.password = userDTO.getPassword();
     }
 
     public Long getId() {
@@ -101,5 +107,10 @@ public class UserModel {
 
     public void setFavoritesMovies(List<MovieModel> favoritesMovies) {
         this.favoritesMovies = favoritesMovies;
+    }
+
+    @PrePersist
+    protected void hashPassword() {
+        this.password = new BCryptPasswordEncoder().encode(this.password);
     }
 }

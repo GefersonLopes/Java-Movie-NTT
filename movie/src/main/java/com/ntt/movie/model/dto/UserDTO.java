@@ -13,6 +13,8 @@ public class UserDTO {
 
     private String email;
 
+    private String password;
+
     private List<RoleDTO> roles;
 
     private List<MovieDTO> favoritesMovies;
@@ -74,4 +76,13 @@ public class UserDTO {
     public void setFavoritesMovies(List<MovieDTO> favoritesMovies) {
         this.favoritesMovies = favoritesMovies;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }
