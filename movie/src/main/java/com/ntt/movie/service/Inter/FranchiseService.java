@@ -15,7 +15,7 @@ public interface FranchiseService {
 
     Optional<FranchiseModel> getById(Long id);
     
-    FranchiseModel updateById(Long id, FranchiseModel franchise);
+    FranchiseModel updateById(Long id, FranchiseCreateRequestDTO franchise);
 
     void delete(Long id);
 }

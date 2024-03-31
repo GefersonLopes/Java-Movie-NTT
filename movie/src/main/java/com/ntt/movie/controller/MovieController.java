@@ -31,7 +31,7 @@ public class MovieController {
         return ResponseEntity.ok(movieService.create(movie));
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<MovieModel> updateById(@PathVariable Long id, @RequestBody MovieModel movie) {
         return ResponseEntity.ok(movieService.updateById(id, movie));
     }

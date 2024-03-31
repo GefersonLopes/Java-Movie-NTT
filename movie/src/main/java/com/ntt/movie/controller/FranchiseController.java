@@ -31,8 +31,8 @@ public class FranchiseController {
         return ResponseEntity.ok(franchiseService.create(franchise));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<FranchiseModel> updateById(@PathVariable Long id, @RequestBody FranchiseModel franchise) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<FranchiseModel> updateById(@PathVariable Long id, @RequestBody FranchiseCreateRequestDTO franchise) {
         return ResponseEntity.ok(franchiseService.updateById(id, franchise));
     }
 

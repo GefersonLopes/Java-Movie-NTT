@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "Actor")
 public class ActorModel {
@@ -16,7 +19,8 @@ public class ActorModel {
     @NotBlank(message = "Name is required")
     private String name;
 
-    @ManyToMany(mappedBy = "actors")
+    @ManyToMany(mappedBy = "actors", cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MovieModel> movies;
 
     public ActorModel() {

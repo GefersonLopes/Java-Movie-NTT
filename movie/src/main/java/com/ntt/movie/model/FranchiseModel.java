@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "Franchise")
 public class FranchiseModel {
@@ -20,17 +23,19 @@ public class FranchiseModel {
 
     @NotNull(message = "Genre is required")
     @Valid
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "genre_id")
     private GenreModel genre;
 
     @NotNull(message = "Studio is required")
     @Valid
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "studio_id")
     private StudioModel studio;
 
-    @OneToMany(mappedBy = "franchise")
+    @OneToMany(mappedBy = "franchise", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MovieModel> movies;
 
     public FranchiseModel() {

@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "Studio")
 public class StudioModel {
@@ -19,7 +22,8 @@ public class StudioModel {
     @NotBlank(message = "Country is required")
     private String country;
 
-    @OneToMany(mappedBy = "studio")
+    @OneToMany(mappedBy = "studio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MovieModel> movies;
 
     public StudioModel() {

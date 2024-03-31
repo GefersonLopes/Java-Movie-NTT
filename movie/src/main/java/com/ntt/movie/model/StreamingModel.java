@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "Streaming")
 public class StreamingModel {
@@ -19,7 +22,8 @@ public class StreamingModel {
     @NotBlank(message = "URL is required")
     private String url;
 
-    @OneToMany(mappedBy = "streaming")
+    @OneToMany(mappedBy = "streaming", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MovieModel> movies;
 
     public StreamingModel() {

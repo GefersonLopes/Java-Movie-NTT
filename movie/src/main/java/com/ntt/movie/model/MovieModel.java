@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "Movie")
 public class MovieModel {
@@ -20,32 +23,38 @@ public class MovieModel {
 
     @NotNull(message = "Genre is required")
     @Valid
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "genre_id")
     private GenreModel genre;
 
     @NotNull(message = "Studio is required")
     @Valid
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "studio_id")
     private StudioModel studio;
 
     @NotNull(message = "Franchise is required")
     @Valid
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "franchise_id")
     private FranchiseModel franchise;
 
     @NotNull(message = "Streaming is required")
     @Valid
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "streaming_id")
     private StreamingModel streaming;
 
-    @ManyToMany(mappedBy = "movies")
+    @ManyToMany(mappedBy = "movies", cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<DirectorModel> directors;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(
             name = "movie_actor",
             joinColumns = @JoinColumn(name = "movie_id"),

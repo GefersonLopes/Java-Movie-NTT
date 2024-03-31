@@ -6,10 +6,16 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ntt.movie.handler.exception.ExceptionBadRequest;
+import com.ntt.movie.handler.exception.ExceptionNotFound;
 import com.ntt.movie.model.*;
 import com.ntt.movie.model.dto.MovieCreateRequestDTO;
 import com.ntt.movie.repository.*;
 import com.ntt.movie.service.Inter.MovieService;
+
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -30,17 +36,17 @@ public class MovieServiceImpl implements MovieService {
 
     @SuppressWarnings("null")
     @Override
-    public MovieModel create(MovieCreateRequestDTO request) {
+    @Transactional
+    public MovieModel create(@Valid @NotNull MovieCreateRequestDTO request) {
 
-        Optional<GenreModel> optionalGenre = genreRepository.findById(request.getGenre_id());
-        Optional<StudioModel> optionalStudio = studioRepository.findById(request.getStudio_id());
-        Optional<FranchiseModel> optionalFranchise = franchiseRepository.findById(request.getFranchise_id());
-        Optional<StreamingModel> optionalStreaming = streamingRepository.findById(request.getStreaming_id());
+        if (request.getTitle() == null || request.getTitle().isEmpty()) {
+            throw new ExceptionBadRequest("Title not allowed.");
+        }
 
-        GenreModel genre = optionalGenre.get();
-        StudioModel studio = optionalStudio.get();
-        FranchiseModel franchise = optionalFranchise.get();
-        StreamingModel streaming = optionalStreaming.get();
+        GenreModel genre = genreRepository.findById(request.getGenre_id()).orElseThrow(() -> new ExceptionNotFound("Genre not found with id: " + request.getGenre_id()));
+        StudioModel studio = studioRepository.findById(request.getStudio_id()).orElseThrow(() -> new ExceptionNotFound("Studio not found with id: " + request.getStudio_id()));
+        FranchiseModel franchise = franchiseRepository.findById(request.getFranchise_id()).orElseThrow(() -> new ExceptionNotFound("Franchise not found with id: " + request.getFranchise_id()));
+        StreamingModel streaming = streamingRepository.findById(request.getStreaming_id()).orElseThrow(() -> new ExceptionNotFound("Streaming not found with id: " + request.getStreaming_id()));
 
         MovieModel movie = new MovieModel();
         movie.setTitle(request.getTitle());
@@ -60,22 +66,47 @@ public class MovieServiceImpl implements MovieService {
     @SuppressWarnings("null")
     @Override
     public Optional<MovieModel> getById(Long id) {
-        return Optional.ofNullable(movieRepository.findById(id).orElse(null));
+        return Optional.ofNullable(movieRepository.findById(id).orElseThrow(() -> new ExceptionNotFound("Movie not found with id: " + id)));
     }
 
     @SuppressWarnings("null")
     @Override
     public MovieModel updateById(Long id, MovieModel movie) {
-        MovieModel movieToUpdate = movieRepository.findById(id).orElse(null);
+        MovieModel movieToUpdate = movieRepository.findById(id).orElseThrow(() -> new ExceptionNotFound("Movie not found with id: " + id));
+
+        if (movie.getTitle() == null || movie.getTitle().isEmpty()) {
+            movie.setTitle(movieToUpdate.getTitle());
+        }
+
+        if (movie.getGenre() == null) {
+            movie.setGenre(movieToUpdate.getGenre());
+        }
+
+        if (movie.getStudio() == null) {
+            movie.setStudio(movieToUpdate.getStudio());
+        }
+
+        if (movie.getFranchise() == null) {
+            movie.setFranchise(movieToUpdate.getFranchise());
+        }
+
+        if (movie.getStreaming() == null) {
+            movie.setStreaming(movieToUpdate.getStreaming());
+        }
 
         movieToUpdate.setTitle(movie.getTitle());
-        
+        movieToUpdate.setGenre(movie.getGenre());
+        movieToUpdate.setStudio(movie.getStudio());
+        movieToUpdate.setFranchise(movie.getFranchise());
+        movieToUpdate.setStreaming(movie.getStreaming());
+                
         return movieRepository.save(movieToUpdate);
     }
 
     @SuppressWarnings("null")
     @Override
-    public void delete(Long id) {
-        movieRepository.deleteById(id);
+    public void delete(@Valid @NotNull Long id) {
+        MovieModel movie = movieRepository.findById(id).orElseThrow(() -> new ExceptionNotFound("Movie not found with id: " + id));
+        movieRepository.deleteById(movie.getId());
     }
 }

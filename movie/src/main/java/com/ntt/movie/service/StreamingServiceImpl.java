@@ -6,18 +6,36 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ntt.movie.handler.exception.ExceptionBadRequest;
+import com.ntt.movie.handler.exception.ExceptionNotFound;
 import com.ntt.movie.model.StreamingModel;
 import com.ntt.movie.repository.StreamingRepository;
 import com.ntt.movie.service.Inter.StreamingService;
+
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 @Service
 public class StreamingServiceImpl implements StreamingService {
     @Autowired
     private StreamingRepository streamingRepository;
 
-    @SuppressWarnings("null")
     @Override
-    public StreamingModel create(StreamingModel streaming) {
+    @Transactional
+    public StreamingModel create(@Valid @NotNull StreamingModel streaming) {
+        if(streaming.getId() != null) {
+            throw new ExceptionBadRequest("id not allowed.");
+        }
+
+        if (streaming.getName() == null || streaming.getName().isEmpty()) {
+            throw new ExceptionBadRequest("name is required.");
+        }
+
+        if (streaming.getUrl() == null || streaming.getUrl().isEmpty()) {
+            throw new ExceptionBadRequest("url is required.");
+        }
+
         return streamingRepository.save(streaming);
     }
 
@@ -28,15 +46,23 @@ public class StreamingServiceImpl implements StreamingService {
 
     @SuppressWarnings("null")
     @Override
-    public Optional<StreamingModel> getById(Long id) {
-        return streamingRepository.findById(id);
+    public Optional<StreamingModel> getById(@Valid @NotNull Long id) {
+        return Optional.ofNullable(streamingRepository.findById(id).orElseThrow(() -> new ExceptionNotFound("Streaming not found with id: " + id)));
     }
 
     @SuppressWarnings("null")
     @Override
     public StreamingModel updateById(Long id, StreamingModel streaming) {
-        StreamingModel streamingToUpdate = streamingRepository.findById(id).orElse(null);
+        StreamingModel streamingToUpdate = streamingRepository.findById(id).orElseThrow(() -> new ExceptionNotFound("Streaming not found with id: " + id));
 
+        if (streaming.getName() == null || streaming.getName().isEmpty()) {
+            streaming.setName(streamingToUpdate.getName());
+        }
+
+        if (streaming.getUrl() == null || streaming.getUrl().isEmpty()) {
+            streaming.setUrl(streamingToUpdate.getUrl());
+        }
+        
         streamingToUpdate.setName(streaming.getName());
         streamingToUpdate.setUrl(streaming.getUrl());
         
@@ -45,7 +71,8 @@ public class StreamingServiceImpl implements StreamingService {
 
     @SuppressWarnings("null")
     @Override
-    public void delete(Long id) {
-        streamingRepository.deleteById(id);
+    public void delete(@Valid @NotNull Long id) {
+        StreamingModel streaming = streamingRepository.findById(id).orElseThrow(() -> new ExceptionNotFound("Streaming not found with id: " + id));
+        streamingRepository.deleteById(streaming.getId());
     }
 }

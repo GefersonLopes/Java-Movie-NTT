@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.ntt.movie.model.dto.UserDTO;
 
 @Entity
@@ -14,6 +17,7 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
     @NotBlank(message = "Name is required")
     private String name;
 
@@ -26,10 +30,12 @@ public class UserModel {
     @NotBlank(message = "Password is required")
     private String password;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<RoleModel> roles;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MovieModel> favoritesMovies;
 
     public UserModel() {

@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "Director")
 public class DirectorModel {
@@ -16,7 +19,8 @@ public class DirectorModel {
     @NotBlank(message = "Name is required")
     private String name;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(
             name = "director_movies",
             joinColumns = @JoinColumn(name = "director_id"),
